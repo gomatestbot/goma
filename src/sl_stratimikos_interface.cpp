@@ -1,20 +1,13 @@
 #include "Stratimikos_DefaultLinearSolverBuilder.hpp"
 #include "Thyra_LinearOpWithSolveFactoryHelpers.hpp"
-#include "Thyra_PreconditionerFactoryHelpers.hpp"
-#include "Thyra_DefaultInverseLinearOp.hpp"
-#include "Thyra_DefaultMultipliedLinearOp.hpp"
 #include "Thyra_EpetraThyraWrappers.hpp"
 #include "Thyra_EpetraLinearOp.hpp"
 #include "Thyra_get_Epetra_Operator.hpp"
-#include "Thyra_TestingTools.hpp"
-#include "EpetraExt_CrsMatrixIn.h"
-#include "Epetra_CrsMatrix.h"
 #include "Teuchos_GlobalMPISession.hpp"
 #include "Teuchos_VerboseObject.hpp"
 #include "Teuchos_XMLParameterListHelpers.hpp"
-#include "Teuchos_CommandLineProcessor.hpp"
 #include "Teuchos_StandardCatchMacros.hpp"
-#include "Teuchos_TimeMonitor.hpp"
+
 #ifdef HAVE_MPI
 #  include "Epetra_MpiComm.h"
 #else
@@ -24,7 +17,7 @@
 #include "Epetra_Map.h"
 #include "Epetra_MultiVector.h"
 #include "Epetra_Vector.h"
-#include "Epetra_CrsMatrix.h"
+#include "Epetra_RowMatrix.h"
 
 #include "sl_util_structs.h"
 #include "sl_stratimikos_interface.h"
