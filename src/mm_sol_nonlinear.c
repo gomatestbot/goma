@@ -51,6 +51,8 @@ static char rcsid[] =
 
 #include "sl_aztecoo_interface.h"
 
+#include "sl_stratimikos_interface.h"
+
 #define _MM_SOL_NONLINEAR_C
 #include "goma.h"
 
@@ -1468,6 +1470,17 @@ EH(-1,"version not compiled with frontal solver");
           matrix_solved = (ams->status[AZ_why] == AZ_normal);
         } else {
           EH(-1, "Sorry, only Epetra matrix formats are currently supported with the AztecOO solver suite\n");
+        }
+        break;
+
+      case STRATIMIKOS:
+        if ( strcmp( Matrix_Format,"epetra" ) == 0 ) {
+          int iterations;
+          int err = stratimikos_solve(ams, delta_x, resid_vector, &iterations);
+          EH(err, "Error in stratimikos solve");
+          aztec_stringer(AZ_normal, iterations, &stringer[0]);
+        } else {
+          EH(-1, "Sorry, only Epetra matrix formats are currently supported with the Stratimikos interface\n");
         }
         break;
 

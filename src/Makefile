@@ -183,6 +183,13 @@ KOMPLEX_LIB ?=
 # Aztecoo is required.
 AZTEC_LIB ?=  -laztecoo -lifpack 
 
+STRATAMIKOS_LIB ?= -lstratimikos -lstratimikosbelos -lstratimikosaztecoo -lstratimikosamesos -lstratimikosml \
+	               -lstratimikosifpack -lbelostpetra -lbelosepetra -lbelos -lml -lifpack -lamesos -lgaleri-xpetra \
+	               -lgaleri -laztecoo -lisorropia -lthyraepetra -lthyracore -lxpetra-sup -lxpetra-ext -lxpetra \
+	               -lepetraext -ltpetraext -ltpetrainout -ltpetra -ltriutils -lzoltan -lepetra -lkokkosdisttsqr \
+	               -lkokkosnodetsqr -lkokkoslinalg -lkokkosnodeapi -lkokkos -lrtop -ltpi -lteuchosremainder \
+	               -lteuchosnumerics -lteuchoscomm -lteuchosparameterlist -lteuchoscore
+
 # AMESOS library
 
 AMESOS_LIB ?= -lamesos -lepetraext -lepetra 
@@ -193,7 +200,7 @@ TEUCHOS_LIB ?= -lteuchoscomm -lteuchoscore -lteuchosnumerics -lteuchosparameterl
 
 # Trilinos includes and libraries
 TRILINOS_INC ?= -isystem $(TRILINOS_TOP)/include
-TRILINOS_LIB ?= -L$(TRILINOS_TOP)/lib  $(AZTEC_LIB) \
+TRILINOS_LIB ?= -L$(TRILINOS_TOP)/lib $(STRATAMIKOS_LIB) $(AZTEC_LIB) \
                  $(KOMPLEX_LIB)  $(AMESOS_LIB) $(TEUCHOS_LIB)
 
 # ARPACK
@@ -505,7 +512,8 @@ SL_SRC= sl_lu.c\
         sl_leastsquares.C \
         sl_epetra_interface.cpp \
         sl_epetra_util.cpp \
-        sl_aztecoo_interface.cpp
+        sl_aztecoo_interface.cpp \
+        sl_stratimikos_interface.cpp
 
 SL_INC= spConfig.h\
         spDefs.h\
@@ -522,9 +530,9 @@ SL_INC= spConfig.h\
         sl_rcm.h \
         sl_epetra_interface.h \
         sl_epetra_util.h \
-        sl_aztecoo_interface.h
+        sl_aztecoo_interface.h \
+        sl_stratimikos_interface.h
         
-
 
 # _____	Machine dependent routines "md_" prefix _______________________________
 

@@ -5776,6 +5776,9 @@ rd_solver_specs(FILE *ifp,
   } else if (strcmp(Matrix_Solver, "aztecoo") == 0) {
     Linear_Solver = AZTECOO;
     is_Solver_Serial = FALSE;
+  } else if (strcmp(Matrix_Solver, "stratimikos") == 0) {
+    Linear_Solver = STRATIMIKOS;
+    is_Solver_Serial = FALSE;
   } else {
     Linear_Solver = AZTEC;
     is_Solver_Serial = FALSE;
