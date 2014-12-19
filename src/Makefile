@@ -183,6 +183,13 @@ KOMPLEX_LIB ?=
 # Aztecoo is required.
 AZTEC_LIB ?=  -laztecoo -lifpack 
 
+STRATAMIKOS_LIB ?= -lstratimikos -lstratimikosbelos -lstratimikosaztecoo -lstratimikosamesos -lstratimikosml \
+	               -lstratimikosifpack -lbelostpetra -lbelosepetra -lbelos -lml -lifpack -lamesos -lgaleri-xpetra \
+	               -lgaleri -laztecoo -lisorropia -lthyraepetra -lthyracore -lxpetra-sup -lxpetra-ext -lxpetra \
+	               -lepetraext -ltpetraext -ltpetrainout -ltpetra -ltriutils -lzoltan -lepetra -lkokkosdisttsqr \
+	               -lkokkosnodetsqr -lkokkoslinalg -lkokkosnodeapi -lkokkos -lrtop -ltpi -lteuchosremainder \
+	               -lteuchosnumerics -lteuchoscomm -lteuchosparameterlist -lteuchoscore
+
 # AMESOS library
 
 AMESOS_LIB ?= -lamesos -lepetraext -lepetra 
@@ -193,7 +200,7 @@ TEUCHOS_LIB ?= -lteuchoscomm -lteuchoscore -lteuchosnumerics -lteuchosparameterl
 
 # Trilinos includes and libraries
 TRILINOS_INC ?= -isystem $(TRILINOS_TOP)/include
-TRILINOS_LIB ?= -L$(TRILINOS_TOP)/lib  $(AZTEC_LIB) \
+TRILINOS_LIB ?= -L$(TRILINOS_TOP)/lib $(STRATAMIKOS_LIB) $(AZTEC_LIB) \
                  $(KOMPLEX_LIB)  $(AMESOS_LIB) $(TEUCHOS_LIB)
 
 # ARPACK
@@ -502,7 +509,11 @@ SL_SRC= sl_lu.c\
         sl_eggroll04.c\
         sl_eggroll05.c\
         sl_amesos_interface.C\
-        sl_leastsquares.C
+        sl_leastsquares.C \
+        sl_epetra_interface.cpp \
+        sl_epetra_util.cpp \
+        sl_aztecoo_interface.cpp \
+        sl_stratimikos_interface.cpp
 
 SL_INC= spConfig.h\
         spDefs.h\
@@ -516,8 +527,12 @@ SL_INC= spConfig.h\
         sl_umf.h\
         sl_util.h\
         sl_util_structs.h \
-        sl_rcm.h
-
+        sl_rcm.h \
+        sl_epetra_interface.h \
+        sl_epetra_util.h \
+        sl_aztecoo_interface.h \
+        sl_stratimikos_interface.h
+        
 
 # _____	Machine dependent routines "md_" prefix _______________________________
 
@@ -709,6 +724,7 @@ GOMA_INCS := ${addprefix $(INCLUDE_DIR)/, $(GOMA_INCS)}
 GOMA_OBJ := ${GOMA_SRC:.c=.o}
 GOMA_OBJ := ${GOMA_OBJ:.F=.o}
 GOMA_OBJ := ${GOMA_OBJ:.C=.o}
+GOMA_OBJ := ${GOMA_OBJ:.cpp=.o}
 
 USER_OBJ := ${USER_SRC:.c=.o}
 USER_OBJ := ${USER_OBJ:.F=.o}
@@ -820,6 +836,10 @@ $(RELEASE_OBJ_DIR)/%.o: %.F
 $(RELEASE_OBJ_DIR)/%.o: %.C
 	@mkdir -p $(RELEASE_OBJ_DIR)
 	$(CXX) -c $(CXXFLAGS) -o $@ $^
+	
+$(RELEASE_OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(RELEASE_OBJ_DIR)
+	$(CXX) -c $(CXXFLAGS) -o $@ $^
 
 # debug objects
 $(DEBUG_OBJ_DIR)/%.o: %.c
@@ -832,6 +852,10 @@ $(DEBUG_OBJ_DIR)/%.o: %.F
 
 $(DEBUG_OBJ_DIR)/%.o: %.C
 	@mkdir -p $(DEBUG_OBJ_DIR)
+	$(CXX) -c $(CXXFLAGS) -o $@ $^
+	
+$(DEBUG_OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(RELEASE_OBJ_DIR)
 	$(CXX) -c $(CXXFLAGS) -o $@ $^
 
 
